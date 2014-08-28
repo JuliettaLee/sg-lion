@@ -1,8 +1,8 @@
 /nbproject/private/
-/EnterpriseApplication1-ejb/nbproject/private/
-/EnterpriseApplication1-war/nbproject/private/
 /build/
-/EnterpriseApplication1-ejb/build/
-/EnterpriseApplication1-ejb/dist/
-/EnterpriseApplication1-war/build/
-/EnterpriseApplication1-war/dist/
+/MerlionPortal-war/nbproject/private/
+/MerlionPortal-ejb/nbproject/private/
+/MerlionPortal-ejb/build/
+/MerlionPortal-ejb/dist/
+/MerlionPortal-war/dist/
+/MerlionPortal-war/build/

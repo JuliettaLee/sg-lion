@@ -14,7 +14,7 @@ is divided into following sections:
   - cleanup
 
 -->
-<project xmlns:ear2="http://www.netbeans.org/ns/j2ee-earproject/2" basedir=".." default="default" name="EnterpriseApplication1-impl">
+<project xmlns:ear2="http://www.netbeans.org/ns/j2ee-earproject/2" basedir=".." default="default" name="MerlionPortal-impl">
     <import file="ant-deploy.xml"/>
     <fail message="Please build using Ant 1.7.1 or higher.">
         <condition>
@@ -51,18 +51,6 @@ is divided into following sections:
         <condition property="do.compile.jsps">
             <istrue value="${compile.jsps}"/>
         </condition>
-        <condition property="do.display.browser.old">
-            <and>
-                <istrue value="${display.browser}"/>
-                <isset property="client.module.uri"/>
-                <not>
-                    <isset property="app.client"/>
-                </not>
-                <not>
-                    <isset property="browser.context"/>
-                </not>
-            </and>
-        </condition>
         <condition property="do.display.browser">
             <and>
                 <istrue value="${display.browser}"/>
@@ -70,7 +58,6 @@ is divided into following sections:
                 <not>
                     <isset property="app.client"/>
                 </not>
-                <isset property="browser.context"/>
             </and>
         </condition>
         <available file="${meta.inf}/MANIFEST.MF" property="has.custom.manifest"/>
@@ -201,11 +188,11 @@ exists or setup the property manually. For example like this:
                 <isset property="build.deploy.on.save"/>
             </not>
         </condition>
-        <ant antfile="${project.EnterpriseApplication1-ejb}/build.xml" inheritall="false" target="dist-ear">
+        <ant antfile="${project.MerlionPortal-ejb}/build.xml" inheritall="false" target="dist-ear">
             <property location="${build.dir}" name="dist.ear.dir"/>
             <property name="deploy.on.save" value="${build.deploy.on.save}"/>
         </ant>
-        <ant antfile="${project.EnterpriseApplication1-war}/build.xml" inheritall="false" target="dist-ear">
+        <ant antfile="${project.MerlionPortal-war}/build.xml" inheritall="false" target="dist-ear">
             <property location="${build.dir}" name="dist.ear.dir"/>
             <property name="deploy.on.save" value="${build.deploy.on.save}"/>
         </ant>
@@ -221,8 +208,8 @@ exists or setup the property manually. For example like this:
         </copy>
     </target>
     <target depends="init,deps-jar,pre-pre-compile,pre-compile" name="-do-compile-deps">
-        <copyfiles files="${reference.EnterpriseApplication1-war.dist-ear}" todir="${build.dir}//"/>
-        <copyfiles files="${reference.EnterpriseApplication1-ejb.dist-ear}" todir="${build.dir}//"/>
+        <copyfiles files="${reference.MerlionPortal-ejb.dist-ear}" todir="${build.dir}//"/>
+        <copyfiles files="${reference.MerlionPortal-war.dist-ear}" todir="${build.dir}//"/>
     </target>
     <target name="post-compile">
         <!-- Empty placeholder for easier customization. -->
@@ -299,8 +286,8 @@ exists or setup the property manually. For example like this:
     </target>
     <target name="-run-deploy-am" unless="no.deps">
         <!-- Task to deploy to the Access Manager runtime. -->
-        <ant antfile="${project.EnterpriseApplication1-ejb}/build.xml" inheritall="false" target="-run-deploy-am"/>
-        <ant antfile="${project.EnterpriseApplication1-war}/build.xml" inheritall="false" target="-run-deploy-am"/>
+        <ant antfile="${project.MerlionPortal-ejb}/build.xml" inheritall="false" target="-run-deploy-am"/>
+        <ant antfile="${project.MerlionPortal-war}/build.xml" inheritall="false" target="-run-deploy-am"/>
     </target>
     <target depends="-init-cos,dist-directory-deploy,pre-run-deploy,-pre-nbmodule-run-deploy,-run-deploy-nb,-init-deploy-ant,-deploy-ant,-run-deploy-am,-post-nbmodule-run-deploy,post-run-deploy" name="run-deploy"/>
     <target if="netbeans.home" name="-run-deploy-nb">
@@ -318,21 +305,10 @@ exists or setup the property manually. For example like this:
     <target depends="dist" name="verify">
         <nbverify file="${dist.jar}"/>
     </target>
-    <target depends="run-deploy,-init-display-browser,-display-browser-nb-old,-display-browser-nb,-display-browser-cl" name="run-display-browser"/>
+    <target depends="run-deploy,-init-display-browser,-display-browser-nb,-display-browser-cl" name="run-display-browser"/>
     <target if="do.display.browser" name="-init-display-browser">
-        <condition property="do.display.browser.nb.old">
-            <and>
-                <isset property="netbeans.home"/>
-                <not>
-                    <isset property="browser.context"/>
-                </not>
-            </and>
-        </condition>
         <condition property="do.display.browser.nb">
-            <and>
-                <isset property="netbeans.home"/>
-                <isset property="browser.context"/>
-            </and>
+            <isset property="netbeans.home"/>
         </condition>
         <condition property="do.display.browser.cl">
             <and>
@@ -341,11 +317,8 @@ exists or setup the property manually. For example like this:
             </and>
         </condition>
     </target>
-    <target if="do.display.browser.nb.old" name="-display-browser-nb-old">
-        <nbbrowse url="${client.url}"/>
-    </target>
     <target if="do.display.browser.nb" name="-display-browser-nb">
-        <nbbrowse context="${browser.context}" url="${client.url}" urlPath="${client.urlPart}"/>
+        <nbbrowse url="${client.url}"/>
     </target>
     <target if="do.display.browser.cl" name="-get-browser" unless="browser">
         <condition property="browser" value="rundll32">
@@ -407,17 +380,17 @@ exists or setup the property manually. For example like this:
         <ear2:run-appclient subprojectname="${app.client}"/>
     </target>
     <target if="j2ee.appclient.mainclass.args" name="-as-retrieve-option-workaround" unless="j2ee.clientName">
-        <property name="client.jar" value="${dist.dir}/EnterpriseApplication1Client.jar"/>
+        <property name="client.jar" value="${dist.dir}/MerlionPortalClient.jar"/>
         <sleep seconds="3"/>
-        <copy failonerror="false" file="${wa.copy.client.jar.from}/EnterpriseApplication1/EnterpriseApplication1Client.jar" todir="${dist.dir}"/>
+        <copy failonerror="false" file="${wa.copy.client.jar.from}/MerlionPortal/MerlionPortalClient.jar" todir="${dist.dir}"/>
         <copy failonerror="false" flatten="true" todir="${dist.dir}/">
-            <fileset dir="${wa.copy.client.jar.from}/EnterpriseApplication1" includes="**/EnterpriseApplication1Client.jar"/>
+            <fileset dir="${wa.copy.client.jar.from}/MerlionPortal" includes="**/MerlionPortalClient.jar"/>
         </copy>
-        <copy flatten="true" todir="${dist.dir}/EnterpriseApplication1Client">
-            <fileset dir="${wa.copy.client.jar.from}/EnterpriseApplication1" includes="**/*.*ar"/>
+        <copy flatten="true" todir="${dist.dir}/MerlionPortalClient">
+            <fileset dir="${wa.copy.client.jar.from}/MerlionPortal" includes="**/*.*ar"/>
         </copy>
-        <copy failonerror="false" flatten="false" todir="${dist.dir}/EnterpriseApplication1Client">
-            <fileset dir="${dist.dir}/gfdeploy/EnterpriseApplication1" includes="**/*.jar"/>
+        <copy failonerror="false" flatten="false" todir="${dist.dir}/MerlionPortalClient">
+            <fileset dir="${dist.dir}/gfdeploy/MerlionPortal" includes="**/*.jar"/>
         </copy>
     </target>
     <target depends="init" name="-init-run-macros">
@@ -469,7 +442,6 @@ exists or setup the property manually. For example like this:
     <target depends="dist" description="Debug project in IDE." if="netbeans.home" name="run-debug" unless="app.client">
         <nbdeploy clientModuleUri="${client.module.uri}" clientUrlPart="${client.urlPart}" debugmode="true"/>
         <antcall target="connect-debugger"/>
-        <antcall target="debug-display-browser-old"/>
         <antcall target="debug-display-browser"/>
     </target>
     <target name="connect-debugger" unless="is.debugged">
@@ -486,11 +458,8 @@ exists or setup the property manually. For example like this:
             </sourcepath>
         </nbjpdaconnect>
     </target>
-    <target if="do.display.browser.old" name="debug-display-browser-old">
-        <nbbrowse url="${client.url}"/>
-    </target>
     <target if="do.display.browser" name="debug-display-browser">
-        <nbbrowse context="${browser.context}" url="${client.url}" urlPath="${client.urlPart}"/>
+        <nbbrowse url="${client.url}"/>
     </target>
     <target if="can.debug.appclient" name="run-debug-appclient">
         <antcall target="-run-debug-appclient"/>
@@ -625,11 +594,11 @@ exists or setup the property manually. For example like this:
                 <isset property="build.deploy.on.save"/>
             </not>
         </condition>
-        <ant antfile="${project.EnterpriseApplication1-ejb}/build.xml" inheritall="false" target="clean-ear">
+        <ant antfile="${project.MerlionPortal-ejb}/build.xml" inheritall="false" target="clean-ear">
             <property location="${build.dir}" name="dist.ear.dir"/>
             <property name="deploy.on.save" value="${build.deploy.on.save}"/>
         </ant>
-        <ant antfile="${project.EnterpriseApplication1-war}/build.xml" inheritall="false" target="clean-ear">
+        <ant antfile="${project.MerlionPortal-war}/build.xml" inheritall="false" target="clean-ear">
             <property location="${build.dir}" name="dist.ear.dir"/>
             <property name="deploy.on.save" value="${build.deploy.on.save}"/>
         </ant>
