@@ -7,4 +7,4 @@
 /MerlionPortal-war/dist/
 /MerlionPortal-war/build/
 /dist/
-sun-resources.xml
+**/sun-resources.xml
