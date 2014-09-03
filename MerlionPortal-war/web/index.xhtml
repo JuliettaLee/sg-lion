@@ -11,6 +11,7 @@
         <title>Welcome</title>
     </h:head>
     <h:body>
+        <h1>MerLION Portal</h1>
         <h2>User Login</h2>
         <h:form>
             <h:panelGrid columns="3" cellpadding="5">
@@ -24,6 +25,7 @@
                 </p:inputText>
                 <h:outputText id="out2" value="#{userView.lastname}" />
             </h:panelGrid>
+            <h:commandButton value="Submit" id="ajax" action="dashboard" ></h:commandButton>
         </h:form>
     </h:body>
 </html>
