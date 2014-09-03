@@ -1,13 +1,11 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entity;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -24,17 +22,17 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author manliqi
+ * @author MelodyPond_2
  */
 @Entity
-@Table(name = "Group")
+@Table(name = "usergroup")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Group1.findAll", query = "SELECT g FROM Group1 g"),
-    @NamedQuery(name = "Group1.findByGroupId", query = "SELECT g FROM Group1 g WHERE g.groupId = :groupId"),
-    @NamedQuery(name = "Group1.findByGroupType", query = "SELECT g FROM Group1 g WHERE g.groupType = :groupType"),
-    @NamedQuery(name = "Group1.findByDescription", query = "SELECT g FROM Group1 g WHERE g.description = :description")})
-public class Group1 implements Serializable {
+    @NamedQuery(name = "Usergroup.findAll", query = "SELECT u FROM Usergroup u"),
+    @NamedQuery(name = "Usergroup.findByGroupId", query = "SELECT u FROM Usergroup u WHERE u.groupId = :groupId"),
+    @NamedQuery(name = "Usergroup.findByGroupType", query = "SELECT u FROM Usergroup u WHERE u.groupType = :groupType"),
+    @NamedQuery(name = "Usergroup.findByDescription", query = "SELECT u FROM Usergroup u WHERE u.description = :description")})
+public class Usergroup implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -47,13 +45,13 @@ public class Group1 implements Serializable {
     @Size(max = 45)
     @Column(name = "description")
     private String description;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "groupgroupId")
-    private List<Staff> staffList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userGroupgroupId")
+    private Collection<Staff> staffCollection;
 
-    public Group1() {
+    public Usergroup() {
     }
 
-    public Group1(Integer groupId) {
+    public Usergroup(Integer groupId) {
         this.groupId = groupId;
     }
 
@@ -82,12 +80,12 @@ public class Group1 implements Serializable {
     }
 
     @XmlTransient
-    public List<Staff> getStaffList() {
-        return staffList;
+    public Collection<Staff> getStaffCollection() {
+        return staffCollection;
     }
 
-    public void setStaffList(List<Staff> staffList) {
-        this.staffList = staffList;
+    public void setStaffCollection(Collection<Staff> staffCollection) {
+        this.staffCollection = staffCollection;
     }
 
     @Override
@@ -100,10 +98,10 @@ public class Group1 implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Group1)) {
+        if (!(object instanceof Usergroup)) {
             return false;
         }
-        Group1 other = (Group1) object;
+        Usergroup other = (Usergroup) object;
         if ((this.groupId == null && other.groupId != null) || (this.groupId != null && !this.groupId.equals(other.groupId))) {
             return false;
         }
@@ -112,7 +110,7 @@ public class Group1 implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Group1[ groupId=" + groupId + " ]";
+        return "entity.Usergroup[ groupId=" + groupId + " ]";
     }
     
 }

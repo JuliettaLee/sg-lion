@@ -1,9 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entity;
 
 import java.io.Serializable;
@@ -23,10 +21,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author manliqi
+ * @author MelodyPond_2
  */
 @Entity
-@Table(name = "Staff")
+@Table(name = "staff")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Staff.findAll", query = "SELECT s FROM Staff s"),
@@ -46,12 +44,12 @@ public class Staff implements Serializable {
     @NotNull
     @Column(name = "SystemUser_systemUserId")
     private Integer systemUsersystemUserId;
+    @JoinColumn(name = "UserGroup_groupId", referencedColumnName = "groupId")
+    @ManyToOne(optional = false)
+    private Usergroup userGroupgroupId;
     @JoinColumn(name = "SystemUser_systemUserId", referencedColumnName = "systemUserId", insertable = false, updatable = false)
     @OneToOne(optional = false)
-    private SystemUser systemUser;
-    @JoinColumn(name = "Group_groupId", referencedColumnName = "groupId")
-    @ManyToOne(optional = false)
-    private Group1 groupgroupId;
+    private Systemuser systemuser;
 
     public Staff() {
     }
@@ -84,20 +82,20 @@ public class Staff implements Serializable {
         this.systemUsersystemUserId = systemUsersystemUserId;
     }
 
-    public SystemUser getSystemUser() {
-        return systemUser;
+    public Usergroup getUserGroupgroupId() {
+        return userGroupgroupId;
     }
 
-    public void setSystemUser(SystemUser systemUser) {
-        this.systemUser = systemUser;
+    public void setUserGroupgroupId(Usergroup userGroupgroupId) {
+        this.userGroupgroupId = userGroupgroupId;
     }
 
-    public Group1 getGroupgroupId() {
-        return groupgroupId;
+    public Systemuser getSystemuser() {
+        return systemuser;
     }
 
-    public void setGroupgroupId(Group1 groupgroupId) {
-        this.groupgroupId = groupgroupId;
+    public void setSystemuser(Systemuser systemuser) {
+        this.systemuser = systemuser;
     }
 
     @Override

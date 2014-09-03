@@ -1,13 +1,11 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entity;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -26,10 +24,10 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author manliqi
+ * @author MelodyPond_2
  */
 @Entity
-@Table(name = "Client")
+@Table(name = "client")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Client.findAll", query = "SELECT c FROM Client c"),
@@ -59,9 +57,9 @@ public class Client implements Serializable {
     private Integer systemUsersystemUserId;
     @JoinColumn(name = "SystemUser_systemUserId", referencedColumnName = "systemUserId", insertable = false, updatable = false)
     @OneToOne(optional = false)
-    private SystemUser systemUser;
+    private Systemuser systemuser;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "clientSystemUsersystemUserId")
-    private List<ProductPOHeader> productPOHeaderList;
+    private Collection<Productpoheader> productpoheaderCollection;
 
     public Client() {
     }
@@ -110,21 +108,21 @@ public class Client implements Serializable {
         this.systemUsersystemUserId = systemUsersystemUserId;
     }
 
-    public SystemUser getSystemUser() {
-        return systemUser;
+    public Systemuser getSystemuser() {
+        return systemuser;
     }
 
-    public void setSystemUser(SystemUser systemUser) {
-        this.systemUser = systemUser;
+    public void setSystemuser(Systemuser systemuser) {
+        this.systemuser = systemuser;
     }
 
     @XmlTransient
-    public List<ProductPOHeader> getProductPOHeaderList() {
-        return productPOHeaderList;
+    public Collection<Productpoheader> getProductpoheaderCollection() {
+        return productpoheaderCollection;
     }
 
-    public void setProductPOHeaderList(List<ProductPOHeader> productPOHeaderList) {
-        this.productPOHeaderList = productPOHeaderList;
+    public void setProductpoheaderCollection(Collection<Productpoheader> productpoheaderCollection) {
+        this.productpoheaderCollection = productpoheaderCollection;
     }
 
     @Override

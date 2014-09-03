@@ -1,14 +1,12 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -32,24 +30,25 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author manliqi
+ * @author MelodyPond_2
  */
 @Entity
-@Table(name = "SystemUser")
+@Table(name = "systemuser")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "SystemUser.findAll", query = "SELECT s FROM SystemUser s"),
-    @NamedQuery(name = "SystemUser.findBySystemUserId", query = "SELECT s FROM SystemUser s WHERE s.systemUserId = :systemUserId"),
-    @NamedQuery(name = "SystemUser.findByEmailAddress", query = "SELECT s FROM SystemUser s WHERE s.emailAddress = :emailAddress"),
-    @NamedQuery(name = "SystemUser.findByPostalAddress", query = "SELECT s FROM SystemUser s WHERE s.postalAddress = :postalAddress"),
-    @NamedQuery(name = "SystemUser.findByContactNumber", query = "SELECT s FROM SystemUser s WHERE s.contactNumber = :contactNumber"),
-    @NamedQuery(name = "SystemUser.findBySalution", query = "SELECT s FROM SystemUser s WHERE s.salution = :salution"),
-    @NamedQuery(name = "SystemUser.findByPassword", query = "SELECT s FROM SystemUser s WHERE s.password = :password"),
-    @NamedQuery(name = "SystemUser.findByLocked", query = "SELECT s FROM SystemUser s WHERE s.locked = :locked"),
-    @NamedQuery(name = "SystemUser.findByFirstTimeLogin", query = "SELECT s FROM SystemUser s WHERE s.firstTimeLogin = :firstTimeLogin"),
-    @NamedQuery(name = "SystemUser.findByCreatedDate", query = "SELECT s FROM SystemUser s WHERE s.createdDate = :createdDate"),
-    @NamedQuery(name = "SystemUser.findByUserType", query = "SELECT s FROM SystemUser s WHERE s.userType = :userType")})
-public class SystemUser implements Serializable {
+    @NamedQuery(name = "Systemuser.findAll", query = "SELECT s FROM Systemuser s"),
+    @NamedQuery(name = "Systemuser.findBySystemUserId", query = "SELECT s FROM Systemuser s WHERE s.systemUserId = :systemUserId"),
+    @NamedQuery(name = "Systemuser.findByEmailAddress", query = "SELECT s FROM Systemuser s WHERE s.emailAddress = :emailAddress"),
+    @NamedQuery(name = "Systemuser.findByPostalAddress", query = "SELECT s FROM Systemuser s WHERE s.postalAddress = :postalAddress"),
+    @NamedQuery(name = "Systemuser.findByContactNumber", query = "SELECT s FROM Systemuser s WHERE s.contactNumber = :contactNumber"),
+    @NamedQuery(name = "Systemuser.findBySalution", query = "SELECT s FROM Systemuser s WHERE s.salution = :salution"),
+    @NamedQuery(name = "Systemuser.findByPassword", query = "SELECT s FROM Systemuser s WHERE s.password = :password"),
+    @NamedQuery(name = "Systemuser.findByLocked", query = "SELECT s FROM Systemuser s WHERE s.locked = :locked"),
+    @NamedQuery(name = "Systemuser.findByResetPasswordUponLogin", query = "SELECT s FROM Systemuser s WHERE s.resetPasswordUponLogin = :resetPasswordUponLogin"),
+    @NamedQuery(name = "Systemuser.findByCreatedDate", query = "SELECT s FROM Systemuser s WHERE s.createdDate = :createdDate"),
+    @NamedQuery(name = "Systemuser.findByUserType", query = "SELECT s FROM Systemuser s WHERE s.userType = :userType"),
+    @NamedQuery(name = "Systemuser.findByActivated", query = "SELECT s FROM Systemuser s WHERE s.activated = :activated")})
+public class Systemuser implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -75,9 +74,8 @@ public class SystemUser implements Serializable {
     private String password;
     @Column(name = "locked")
     private Boolean locked;
-    @Size(max = 45)
-    @Column(name = "firstTimeLogin")
-    private String firstTimeLogin;
+    @Column(name = "resetPasswordUponLogin")
+    private Boolean resetPasswordUponLogin;
     @Column(name = "createdDate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
@@ -86,29 +84,34 @@ public class SystemUser implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "userType")
     private String userType;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "systemUser")
-    private Staff staff;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "systemUsersystemUserId")
-    private List<Message> messageList;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "activated")
+    private boolean activated;
     @JoinColumn(name = "Company_companyId", referencedColumnName = "companyId")
     @ManyToOne(optional = false)
     private Company companycompanyId;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "systemUser")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "systemuser")
     private Client client;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "systemUsersystemUserId")
-    private List<SystemLog> systemLogList;
+    private Collection<Systemlog> systemlogCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "systemUsersystemUserId")
+    private Collection<Message> messageCollection;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "systemuser")
+    private Staff staff;
 
-    public SystemUser() {
+    public Systemuser() {
     }
 
-    public SystemUser(Integer systemUserId) {
+    public Systemuser(Integer systemUserId) {
         this.systemUserId = systemUserId;
     }
 
-    public SystemUser(Integer systemUserId, String emailAddress, String userType) {
+    public Systemuser(Integer systemUserId, String emailAddress, String userType, boolean activated) {
         this.systemUserId = systemUserId;
         this.emailAddress = emailAddress;
         this.userType = userType;
+        this.activated = activated;
     }
 
     public Integer getSystemUserId() {
@@ -167,12 +170,12 @@ public class SystemUser implements Serializable {
         this.locked = locked;
     }
 
-    public String getFirstTimeLogin() {
-        return firstTimeLogin;
+    public Boolean getResetPasswordUponLogin() {
+        return resetPasswordUponLogin;
     }
 
-    public void setFirstTimeLogin(String firstTimeLogin) {
-        this.firstTimeLogin = firstTimeLogin;
+    public void setResetPasswordUponLogin(Boolean resetPasswordUponLogin) {
+        this.resetPasswordUponLogin = resetPasswordUponLogin;
     }
 
     public Date getCreatedDate() {
@@ -191,21 +194,12 @@ public class SystemUser implements Serializable {
         this.userType = userType;
     }
 
-    public Staff getStaff() {
-        return staff;
+    public boolean getActivated() {
+        return activated;
     }
 
-    public void setStaff(Staff staff) {
-        this.staff = staff;
-    }
-
-    @XmlTransient
-    public List<Message> getMessageList() {
-        return messageList;
-    }
-
-    public void setMessageList(List<Message> messageList) {
-        this.messageList = messageList;
+    public void setActivated(boolean activated) {
+        this.activated = activated;
     }
 
     public Company getCompanycompanyId() {
@@ -225,12 +219,29 @@ public class SystemUser implements Serializable {
     }
 
     @XmlTransient
-    public List<SystemLog> getSystemLogList() {
-        return systemLogList;
+    public Collection<Systemlog> getSystemlogCollection() {
+        return systemlogCollection;
     }
 
-    public void setSystemLogList(List<SystemLog> systemLogList) {
-        this.systemLogList = systemLogList;
+    public void setSystemlogCollection(Collection<Systemlog> systemlogCollection) {
+        this.systemlogCollection = systemlogCollection;
+    }
+
+    @XmlTransient
+    public Collection<Message> getMessageCollection() {
+        return messageCollection;
+    }
+
+    public void setMessageCollection(Collection<Message> messageCollection) {
+        this.messageCollection = messageCollection;
+    }
+
+    public Staff getStaff() {
+        return staff;
+    }
+
+    public void setStaff(Staff staff) {
+        this.staff = staff;
     }
 
     @Override
@@ -243,10 +254,10 @@ public class SystemUser implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof SystemUser)) {
+        if (!(object instanceof Systemuser)) {
             return false;
         }
-        SystemUser other = (SystemUser) object;
+        Systemuser other = (Systemuser) object;
         if ((this.systemUserId == null && other.systemUserId != null) || (this.systemUserId != null && !this.systemUserId.equals(other.systemUserId))) {
             return false;
         }
@@ -255,7 +266,7 @@ public class SystemUser implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.SystemUser[ systemUserId=" + systemUserId + " ]";
+        return "entity.Systemuser[ systemUserId=" + systemUserId + " ]";
     }
     
 }

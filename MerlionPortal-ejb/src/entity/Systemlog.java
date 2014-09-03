@@ -1,9 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entity;
 
 import java.io.Serializable;
@@ -26,17 +24,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author manliqi
+ * @author MelodyPond_2
  */
 @Entity
-@Table(name = "SystemLog")
+@Table(name = "systemlog")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "SystemLog.findAll", query = "SELECT s FROM SystemLog s"),
-    @NamedQuery(name = "SystemLog.findByLogId", query = "SELECT s FROM SystemLog s WHERE s.logId = :logId"),
-    @NamedQuery(name = "SystemLog.findByLogTime", query = "SELECT s FROM SystemLog s WHERE s.logTime = :logTime"),
-    @NamedQuery(name = "SystemLog.findByAction", query = "SELECT s FROM SystemLog s WHERE s.action = :action")})
-public class SystemLog implements Serializable {
+    @NamedQuery(name = "Systemlog.findAll", query = "SELECT s FROM Systemlog s"),
+    @NamedQuery(name = "Systemlog.findByLogId", query = "SELECT s FROM Systemlog s WHERE s.logId = :logId"),
+    @NamedQuery(name = "Systemlog.findByLogTime", query = "SELECT s FROM Systemlog s WHERE s.logTime = :logTime"),
+    @NamedQuery(name = "Systemlog.findByAction", query = "SELECT s FROM Systemlog s WHERE s.action = :action")})
+public class Systemlog implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,12 +49,12 @@ public class SystemLog implements Serializable {
     private String action;
     @JoinColumn(name = "SystemUser_systemUserId", referencedColumnName = "systemUserId")
     @ManyToOne(optional = false)
-    private SystemUser systemUsersystemUserId;
+    private Systemuser systemUsersystemUserId;
 
-    public SystemLog() {
+    public Systemlog() {
     }
 
-    public SystemLog(Integer logId) {
+    public Systemlog(Integer logId) {
         this.logId = logId;
     }
 
@@ -84,11 +82,11 @@ public class SystemLog implements Serializable {
         this.action = action;
     }
 
-    public SystemUser getSystemUsersystemUserId() {
+    public Systemuser getSystemUsersystemUserId() {
         return systemUsersystemUserId;
     }
 
-    public void setSystemUsersystemUserId(SystemUser systemUsersystemUserId) {
+    public void setSystemUsersystemUserId(Systemuser systemUsersystemUserId) {
         this.systemUsersystemUserId = systemUsersystemUserId;
     }
 
@@ -102,10 +100,10 @@ public class SystemLog implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof SystemLog)) {
+        if (!(object instanceof Systemlog)) {
             return false;
         }
-        SystemLog other = (SystemLog) object;
+        Systemlog other = (Systemlog) object;
         if ((this.logId == null && other.logId != null) || (this.logId != null && !this.logId.equals(other.logId))) {
             return false;
         }
@@ -114,7 +112,7 @@ public class SystemLog implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.SystemLog[ logId=" + logId + " ]";
+        return "entity.Systemlog[ logId=" + logId + " ]";
     }
     
 }

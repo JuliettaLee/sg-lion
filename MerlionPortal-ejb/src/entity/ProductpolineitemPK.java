@@ -1,9 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entity;
 
 import java.io.Serializable;
@@ -14,10 +12,10 @@ import javax.validation.constraints.NotNull;
 
 /**
  *
- * @author manliqi
+ * @author MelodyPond_2
  */
 @Embeddable
-public class ProductPOLineItemPK implements Serializable {
+public class ProductpolineitemPK implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "Product_productId")
@@ -27,10 +25,10 @@ public class ProductPOLineItemPK implements Serializable {
     @Column(name = "ProductPOHeader_productPOId")
     private int productPOHeaderproductPOId;
 
-    public ProductPOLineItemPK() {
+    public ProductpolineitemPK() {
     }
 
-    public ProductPOLineItemPK(int productproductId, int productPOHeaderproductPOId) {
+    public ProductpolineitemPK(int productproductId, int productPOHeaderproductPOId) {
         this.productproductId = productproductId;
         this.productPOHeaderproductPOId = productPOHeaderproductPOId;
     }
@@ -62,10 +60,10 @@ public class ProductPOLineItemPK implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ProductPOLineItemPK)) {
+        if (!(object instanceof ProductpolineitemPK)) {
             return false;
         }
-        ProductPOLineItemPK other = (ProductPOLineItemPK) object;
+        ProductpolineitemPK other = (ProductpolineitemPK) object;
         if (this.productproductId != other.productproductId) {
             return false;
         }
@@ -77,7 +75,7 @@ public class ProductPOLineItemPK implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.ProductPOLineItemPK[ productproductId=" + productproductId + ", productPOHeaderproductPOId=" + productPOHeaderproductPOId + " ]";
+        return "entity.ProductpolineitemPK[ productproductId=" + productproductId + ", productPOHeaderproductPOId=" + productPOHeaderproductPOId + " ]";
     }
     
 }

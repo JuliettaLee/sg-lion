@@ -1,14 +1,12 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -29,23 +27,23 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author manliqi
+ * @author MelodyPond_2
  */
 @Entity
-@Table(name = "ProductPOHeader")
+@Table(name = "productpoheader")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "ProductPOHeader.findAll", query = "SELECT p FROM ProductPOHeader p"),
-    @NamedQuery(name = "ProductPOHeader.findByProductPOId", query = "SELECT p FROM ProductPOHeader p WHERE p.productPOId = :productPOId"),
-    @NamedQuery(name = "ProductPOHeader.findByCreatedDate", query = "SELECT p FROM ProductPOHeader p WHERE p.createdDate = :createdDate"),
-    @NamedQuery(name = "ProductPOHeader.findBySalesPersonId", query = "SELECT p FROM ProductPOHeader p WHERE p.salesPersonId = :salesPersonId"),
-    @NamedQuery(name = "ProductPOHeader.findByPrice", query = "SELECT p FROM ProductPOHeader p WHERE p.price = :price"),
-    @NamedQuery(name = "ProductPOHeader.findByStatus", query = "SELECT p FROM ProductPOHeader p WHERE p.status = :status"),
-    @NamedQuery(name = "ProductPOHeader.findByShipTo", query = "SELECT p FROM ProductPOHeader p WHERE p.shipTo = :shipTo"),
-    @NamedQuery(name = "ProductPOHeader.findByBillTo", query = "SELECT p FROM ProductPOHeader p WHERE p.billTo = :billTo"),
-    @NamedQuery(name = "ProductPOHeader.findByContactPersonPhoneNumber", query = "SELECT p FROM ProductPOHeader p WHERE p.contactPersonPhoneNumber = :contactPersonPhoneNumber"),
-    @NamedQuery(name = "ProductPOHeader.findByContactPersonName", query = "SELECT p FROM ProductPOHeader p WHERE p.contactPersonName = :contactPersonName")})
-public class ProductPOHeader implements Serializable {
+    @NamedQuery(name = "Productpoheader.findAll", query = "SELECT p FROM Productpoheader p"),
+    @NamedQuery(name = "Productpoheader.findByProductPOId", query = "SELECT p FROM Productpoheader p WHERE p.productPOId = :productPOId"),
+    @NamedQuery(name = "Productpoheader.findByCreatedDate", query = "SELECT p FROM Productpoheader p WHERE p.createdDate = :createdDate"),
+    @NamedQuery(name = "Productpoheader.findBySalesPersonId", query = "SELECT p FROM Productpoheader p WHERE p.salesPersonId = :salesPersonId"),
+    @NamedQuery(name = "Productpoheader.findByPrice", query = "SELECT p FROM Productpoheader p WHERE p.price = :price"),
+    @NamedQuery(name = "Productpoheader.findByStatus", query = "SELECT p FROM Productpoheader p WHERE p.status = :status"),
+    @NamedQuery(name = "Productpoheader.findByShipTo", query = "SELECT p FROM Productpoheader p WHERE p.shipTo = :shipTo"),
+    @NamedQuery(name = "Productpoheader.findByBillTo", query = "SELECT p FROM Productpoheader p WHERE p.billTo = :billTo"),
+    @NamedQuery(name = "Productpoheader.findByContactPersonPhoneNumber", query = "SELECT p FROM Productpoheader p WHERE p.contactPersonPhoneNumber = :contactPersonPhoneNumber"),
+    @NamedQuery(name = "Productpoheader.findByContactPersonName", query = "SELECT p FROM Productpoheader p WHERE p.contactPersonName = :contactPersonName")})
+public class Productpoheader implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -77,17 +75,17 @@ public class ProductPOHeader implements Serializable {
     @Column(name = "contactPersonName")
     private String contactPersonName;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productPOHeaderproductPOId")
-    private List<ProductSOHeader> productSOHeaderList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productPOHeader")
-    private List<ProductPOLineItem> productPOLineItemList;
+    private Collection<Productsoheader> productsoheaderCollection;
     @JoinColumn(name = "Client_SystemUser_systemUserId", referencedColumnName = "SystemUser_systemUserId")
     @ManyToOne(optional = false)
     private Client clientSystemUsersystemUserId;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productpoheader")
+    private Collection<Productpolineitem> productpolineitemCollection;
 
-    public ProductPOHeader() {
+    public Productpoheader() {
     }
 
-    public ProductPOHeader(Integer productPOId) {
+    public Productpoheader(Integer productPOId) {
         this.productPOId = productPOId;
     }
 
@@ -164,21 +162,12 @@ public class ProductPOHeader implements Serializable {
     }
 
     @XmlTransient
-    public List<ProductSOHeader> getProductSOHeaderList() {
-        return productSOHeaderList;
+    public Collection<Productsoheader> getProductsoheaderCollection() {
+        return productsoheaderCollection;
     }
 
-    public void setProductSOHeaderList(List<ProductSOHeader> productSOHeaderList) {
-        this.productSOHeaderList = productSOHeaderList;
-    }
-
-    @XmlTransient
-    public List<ProductPOLineItem> getProductPOLineItemList() {
-        return productPOLineItemList;
-    }
-
-    public void setProductPOLineItemList(List<ProductPOLineItem> productPOLineItemList) {
-        this.productPOLineItemList = productPOLineItemList;
+    public void setProductsoheaderCollection(Collection<Productsoheader> productsoheaderCollection) {
+        this.productsoheaderCollection = productsoheaderCollection;
     }
 
     public Client getClientSystemUsersystemUserId() {
@@ -187,6 +176,15 @@ public class ProductPOHeader implements Serializable {
 
     public void setClientSystemUsersystemUserId(Client clientSystemUsersystemUserId) {
         this.clientSystemUsersystemUserId = clientSystemUsersystemUserId;
+    }
+
+    @XmlTransient
+    public Collection<Productpolineitem> getProductpolineitemCollection() {
+        return productpolineitemCollection;
+    }
+
+    public void setProductpolineitemCollection(Collection<Productpolineitem> productpolineitemCollection) {
+        this.productpolineitemCollection = productpolineitemCollection;
     }
 
     @Override
@@ -199,10 +197,10 @@ public class ProductPOHeader implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ProductPOHeader)) {
+        if (!(object instanceof Productpoheader)) {
             return false;
         }
-        ProductPOHeader other = (ProductPOHeader) object;
+        Productpoheader other = (Productpoheader) object;
         if ((this.productPOId == null && other.productPOId != null) || (this.productPOId != null && !this.productPOId.equals(other.productPOId))) {
             return false;
         }
@@ -211,7 +209,7 @@ public class ProductPOHeader implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.ProductPOHeader[ productPOId=" + productPOId + " ]";
+        return "entity.Productpoheader[ productPOId=" + productPOId + " ]";
     }
     
 }

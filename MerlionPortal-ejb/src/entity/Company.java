@@ -1,13 +1,11 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entity;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -25,16 +23,17 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author manliqi
+ * @author MelodyPond_2
  */
 @Entity
-@Table(name = "Company")
+@Table(name = "company")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Company.findAll", query = "SELECT c FROM Company c"),
     @NamedQuery(name = "Company.findByCompanyId", query = "SELECT c FROM Company c WHERE c.companyId = :companyId"),
     @NamedQuery(name = "Company.findByName", query = "SELECT c FROM Company c WHERE c.name = :name"),
     @NamedQuery(name = "Company.findByAddress", query = "SELECT c FROM Company c WHERE c.address = :address"),
+    @NamedQuery(name = "Company.findByContactNumber", query = "SELECT c FROM Company c WHERE c.contactNumber = :contactNumber"),
     @NamedQuery(name = "Company.findByContactPersonName", query = "SELECT c FROM Company c WHERE c.contactPersonName = :contactPersonName"),
     @NamedQuery(name = "Company.findByEmailAddress", query = "SELECT c FROM Company c WHERE c.emailAddress = :emailAddress"),
     @NamedQuery(name = "Company.findByDescription", query = "SELECT c FROM Company c WHERE c.description = :description")})
@@ -52,6 +51,9 @@ public class Company implements Serializable {
     @Column(name = "address")
     private String address;
     @Size(max = 45)
+    @Column(name = "contactNumber")
+    private String contactNumber;
+    @Size(max = 45)
     @Column(name = "contactPersonName")
     private String contactPersonName;
     @Size(max = 45)
@@ -61,9 +63,9 @@ public class Company implements Serializable {
     @Column(name = "description")
     private String description;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "companycompanyId")
-    private List<Product> productList;
+    private Collection<Systemuser> systemuserCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "companycompanyId")
-    private List<SystemUser> systemUserList;
+    private Collection<Product> productCollection;
 
     public Company() {
     }
@@ -96,6 +98,14 @@ public class Company implements Serializable {
         this.address = address;
     }
 
+    public String getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
+    }
+
     public String getContactPersonName() {
         return contactPersonName;
     }
@@ -121,21 +131,21 @@ public class Company implements Serializable {
     }
 
     @XmlTransient
-    public List<Product> getProductList() {
-        return productList;
+    public Collection<Systemuser> getSystemuserCollection() {
+        return systemuserCollection;
     }
 
-    public void setProductList(List<Product> productList) {
-        this.productList = productList;
+    public void setSystemuserCollection(Collection<Systemuser> systemuserCollection) {
+        this.systemuserCollection = systemuserCollection;
     }
 
     @XmlTransient
-    public List<SystemUser> getSystemUserList() {
-        return systemUserList;
+    public Collection<Product> getProductCollection() {
+        return productCollection;
     }
 
-    public void setSystemUserList(List<SystemUser> systemUserList) {
-        this.systemUserList = systemUserList;
+    public void setProductCollection(Collection<Product> productCollection) {
+        this.productCollection = productCollection;
     }
 
     @Override

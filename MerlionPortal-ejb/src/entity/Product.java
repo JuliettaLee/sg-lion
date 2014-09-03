@@ -1,13 +1,11 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entity;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -27,10 +25,10 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author manliqi
+ * @author MelodyPond_2
  */
 @Entity
-@Table(name = "Product")
+@Table(name = "product")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"),
@@ -54,13 +52,13 @@ public class Product implements Serializable {
     @Size(max = 45)
     @Column(name = "description")
     private String description;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
+    private Collection<Productsolineitem> productsolineitemCollection;
     @JoinColumn(name = "Company_companyId", referencedColumnName = "companyId")
     @ManyToOne(optional = false)
     private Company companycompanyId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
-    private List<ProductSOLineItem> productSOLineItemList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
-    private List<ProductPOLineItem> productPOLineItemList;
+    private Collection<Productpolineitem> productpolineitemCollection;
 
     public Product() {
     }
@@ -101,6 +99,15 @@ public class Product implements Serializable {
         this.description = description;
     }
 
+    @XmlTransient
+    public Collection<Productsolineitem> getProductsolineitemCollection() {
+        return productsolineitemCollection;
+    }
+
+    public void setProductsolineitemCollection(Collection<Productsolineitem> productsolineitemCollection) {
+        this.productsolineitemCollection = productsolineitemCollection;
+    }
+
     public Company getCompanycompanyId() {
         return companycompanyId;
     }
@@ -110,21 +117,12 @@ public class Product implements Serializable {
     }
 
     @XmlTransient
-    public List<ProductSOLineItem> getProductSOLineItemList() {
-        return productSOLineItemList;
+    public Collection<Productpolineitem> getProductpolineitemCollection() {
+        return productpolineitemCollection;
     }
 
-    public void setProductSOLineItemList(List<ProductSOLineItem> productSOLineItemList) {
-        this.productSOLineItemList = productSOLineItemList;
-    }
-
-    @XmlTransient
-    public List<ProductPOLineItem> getProductPOLineItemList() {
-        return productPOLineItemList;
-    }
-
-    public void setProductPOLineItemList(List<ProductPOLineItem> productPOLineItemList) {
-        this.productPOLineItemList = productPOLineItemList;
+    public void setProductpolineitemCollection(Collection<Productpolineitem> productpolineitemCollection) {
+        this.productpolineitemCollection = productpolineitemCollection;
     }
 
     @Override

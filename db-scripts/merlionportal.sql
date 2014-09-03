@@ -6,80 +6,98 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- Schema merlionLogisticDB
 -- -----------------------------------------------------
 DROP SCHEMA IF EXISTS `merlionLogisticDB` ;
-CREATE SCHEMA IF NOT EXISTS `merlionLogisticDB` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
+CREATE SCHEMA IF NOT EXISTS `merlionLogisticDB` DEFAULT CHARACTER SET utf8 ;
 USE `merlionLogisticDB` ;
 
 -- -----------------------------------------------------
 -- Table `merlionLogisticDB`.`Company`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `merlionLogisticDB`.`Company` (
-  `companyId` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NULL,
-  `address` VARCHAR(255) NULL,
-  `contactPersonName` VARCHAR(45) NULL,
-  `emailAddress` VARCHAR(45) NULL,
-  `description` VARCHAR(45) NULL,
+  `companyId` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NULL DEFAULT NULL,
+  `address` VARCHAR(255) NULL DEFAULT NULL,
+  `contactNumber` VARCHAR(45) NULL,
+  `contactPersonName` VARCHAR(45) NULL DEFAULT NULL,
+  `emailAddress` VARCHAR(45) NULL DEFAULT NULL,
+  `description` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`companyId`))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
 -- Table `merlionLogisticDB`.`SystemUser`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `merlionLogisticDB`.`SystemUser` (
-  `systemUserId` INT NOT NULL AUTO_INCREMENT,
+  `systemUserId` INT(11) NOT NULL AUTO_INCREMENT,
   `emailAddress` VARCHAR(45) NOT NULL,
-  `postalAddress` VARCHAR(45) NULL,
-  `contactNumber` VARCHAR(45) NULL,
-  `salution` VARCHAR(45) NULL,
-  `password` VARCHAR(45) NULL,
-  `locked` TINYINT(1) NULL,
-  `firstTimeLogin` VARCHAR(45) NULL,
-  `createdDate` TIMESTAMP NULL,
-  `Company_companyId` INT NOT NULL,
+  `postalAddress` VARCHAR(45) NULL DEFAULT NULL,
+  `contactNumber` VARCHAR(45) NULL DEFAULT NULL,
+  `salution` VARCHAR(45) NULL DEFAULT NULL,
+  `password` VARCHAR(45) NULL DEFAULT NULL,
+  `locked` TINYINT(1) NULL DEFAULT NULL,
+  `resetPasswordUponLogin` TINYINT(1) NULL DEFAULT NULL,
+  `createdDate` TIMESTAMP NULL DEFAULT NULL,
+  `Company_companyId` INT(11) NOT NULL,
   `userType` VARCHAR(45) NOT NULL,
+  `activated` TINYINT(1) NOT NULL,
   PRIMARY KEY (`systemUserId`),
-  INDEX `fk_SystemUser_Company1_idx` (`Company_companyId` ASC),
   UNIQUE INDEX `emailAddress_UNIQUE` (`emailAddress` ASC),
+  INDEX `fk_SystemUser_Company1_idx` (`Company_companyId` ASC),
   CONSTRAINT `fk_SystemUser_Company1`
     FOREIGN KEY (`Company_companyId`)
     REFERENCES `merlionLogisticDB`.`Company` (`companyId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `merlionLogisticDB`.`SystemLog`
+-- Table `merlionLogisticDB`.`Client`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `merlionLogisticDB`.`SystemLog` (
-  `logId` INT NOT NULL AUTO_INCREMENT,
-  `logTime` TIMESTAMP NULL,
-  `action` VARCHAR(255) NULL,
-  `SystemUser_systemUserId` INT NOT NULL,
-  PRIMARY KEY (`logId`),
-  INDEX `fk_SystemLog_SystemUser_idx` (`SystemUser_systemUserId` ASC),
-  CONSTRAINT `fk_SystemLog_SystemUser`
+CREATE TABLE IF NOT EXISTS `merlionLogisticDB`.`Client` (
+  `contactPersonFirstName` VARCHAR(45) NULL DEFAULT NULL,
+  `contactPersonLastName` VARCHAR(45) NULL DEFAULT NULL,
+  `companyName` VARCHAR(45) NULL DEFAULT NULL,
+  `credit` VARCHAR(45) NULL DEFAULT NULL,
+  `SystemUser_systemUserId` INT(11) NOT NULL,
+  PRIMARY KEY (`SystemUser_systemUserId`),
+  INDEX `fk_Client_SystemUser1_idx` (`SystemUser_systemUserId` ASC),
+  CONSTRAINT `fk_Client_SystemUser1`
     FOREIGN KEY (`SystemUser_systemUserId`)
     REFERENCES `merlionLogisticDB`.`SystemUser` (`systemUserId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `merlionLogisticDB`.`UserGroup`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `merlionLogisticDB`.`UserGroup` (
+  `groupId` INT(11) NOT NULL,
+  `groupType` VARCHAR(45) NULL DEFAULT NULL,
+  `description` VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (`groupId`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
 -- Table `merlionLogisticDB`.`Message`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `merlionLogisticDB`.`Message` (
-  `messageId` INT NOT NULL AUTO_INCREMENT,
-  `messageTitle` VARCHAR(45) NULL,
-  `messageType` VARCHAR(45) NULL,
-  `messageBody` VARCHAR(45) NULL,
-  `sender` VARCHAR(45) NULL,
-  `receiver` VARCHAR(45) NULL,
-  `sentTime` TIMESTAMP NULL,
-  `status` VARCHAR(45) NULL,
-  `SystemUser_systemUserId` INT NOT NULL,
+  `messageId` INT(11) NOT NULL AUTO_INCREMENT,
+  `messageTitle` VARCHAR(45) NULL DEFAULT NULL,
+  `messageType` VARCHAR(45) NULL DEFAULT NULL,
+  `messageBody` VARCHAR(45) NULL DEFAULT NULL,
+  `sender` VARCHAR(45) NULL DEFAULT NULL,
+  `receiver` VARCHAR(45) NULL DEFAULT NULL,
+  `sentTime` TIMESTAMP NULL DEFAULT NULL,
+  `status` VARCHAR(45) NULL DEFAULT NULL,
+  `SystemUser_systemUserId` INT(11) NOT NULL,
   PRIMARY KEY (`messageId`),
   INDEX `fk_Message_SystemUser1_idx` (`SystemUser_systemUserId` ASC),
   CONSTRAINT `fk_Message_SystemUser1`
@@ -87,71 +105,18 @@ CREATE TABLE IF NOT EXISTS `merlionLogisticDB`.`Message` (
     REFERENCES `merlionLogisticDB`.`SystemUser` (`systemUserId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `merlionLogisticDB`.`UserGroup`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `merlionLogisticDB`.`UserGroup` (
-  `userGroupId` INT(64) NOT NULL AUTO_INCREMENT,
-  `groupType` VARCHAR(45) NULL,
-  `description` VARCHAR(45) NULL,
-  PRIMARY KEY (`userGroupId`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `merlionLogisticDB`.`Client`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `merlionLogisticDB`.`Client` (
-  `contactPersonFirstName` VARCHAR(45) NULL,
-  `contactPersonLastName` VARCHAR(45) NULL,
-  `companyName` VARCHAR(45) NULL,
-  `credit` VARCHAR(45) NULL,
-  `SystemUser_systemUserId` INT NOT NULL,
-  INDEX `fk_Client_SystemUser1_idx` (`SystemUser_systemUserId` ASC),
-  PRIMARY KEY (`SystemUser_systemUserId`),
-  CONSTRAINT `fk_Client_SystemUser1`
-    FOREIGN KEY (`SystemUser_systemUserId`)
-    REFERENCES `merlionLogisticDB`.`SystemUser` (`systemUserId`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `merlionLogisticDB`.`ProductPOHeader`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `merlionLogisticDB`.`ProductPOHeader` (
-  `productPOId` INT NOT NULL,
-  `createdDate` TIMESTAMP NULL,
-  `salesPersonId` VARCHAR(45) NULL,
-  `price` DOUBLE NULL,
-  `status` VARCHAR(45) NULL,
-  `shipTo` VARCHAR(45) NULL,
-  `billTo` VARCHAR(45) NULL,
-  `contactPersonPhoneNumber` VARCHAR(45) NULL,
-  `contactPersonName` VARCHAR(45) NULL,
-  `Client_SystemUser_systemUserId` INT NOT NULL,
-  PRIMARY KEY (`productPOId`),
-  INDEX `fk_ProductPOHeader_Client1_idx` (`Client_SystemUser_systemUserId` ASC),
-  CONSTRAINT `fk_ProductPOHeader_Client1`
-    FOREIGN KEY (`Client_SystemUser_systemUserId`)
-    REFERENCES `merlionLogisticDB`.`Client` (`SystemUser_systemUserId`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
 -- Table `merlionLogisticDB`.`Product`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `merlionLogisticDB`.`Product` (
-  `productId` INT NOT NULL AUTO_INCREMENT,
-  `currency` VARCHAR(45) NULL,
-  `price` DOUBLE NULL,
-  `description` VARCHAR(45) NULL,
+  `productId` INT(11) NOT NULL AUTO_INCREMENT,
+  `currency` VARCHAR(45) NULL DEFAULT NULL,
+  `price` DOUBLE NULL DEFAULT NULL,
+  `description` VARCHAR(45) NULL DEFAULT NULL,
   `Company_companyId` INT(64) NOT NULL,
   PRIMARY KEY (`productId`),
   INDEX `fk_Product_Company1_idx` (`Company_companyId` ASC),
@@ -160,16 +125,42 @@ CREATE TABLE IF NOT EXISTS `merlionLogisticDB`.`Product` (
     REFERENCES `merlionLogisticDB`.`Company` (`companyId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `merlionLogisticDB`.`ProductPOHeader`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `merlionLogisticDB`.`ProductPOHeader` (
+  `productPOId` INT(11) NOT NULL,
+  `createdDate` TIMESTAMP NULL DEFAULT NULL,
+  `salesPersonId` VARCHAR(45) NULL DEFAULT NULL,
+  `price` DOUBLE NULL DEFAULT NULL,
+  `status` VARCHAR(45) NULL DEFAULT NULL,
+  `shipTo` VARCHAR(45) NULL DEFAULT NULL,
+  `billTo` VARCHAR(45) NULL DEFAULT NULL,
+  `contactPersonPhoneNumber` VARCHAR(45) NULL DEFAULT NULL,
+  `contactPersonName` VARCHAR(45) NULL DEFAULT NULL,
+  `Client_SystemUser_systemUserId` INT(11) NOT NULL,
+  PRIMARY KEY (`productPOId`),
+  INDEX `fk_ProductPOHeader_Client1_idx` (`Client_SystemUser_systemUserId` ASC),
+  CONSTRAINT `fk_ProductPOHeader_Client1`
+    FOREIGN KEY (`Client_SystemUser_systemUserId`)
+    REFERENCES `merlionLogisticDB`.`Client` (`SystemUser_systemUserId`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
 -- Table `merlionLogisticDB`.`ProductPOLineItem`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `merlionLogisticDB`.`ProductPOLineItem` (
-  `Product_productId` INT NOT NULL,
-  `ProductPOHeader_productPOId` INT NOT NULL,
-  `quantity` INT NULL,
+  `Product_productId` INT(11) NOT NULL,
+  `ProductPOHeader_productPOId` INT(11) NOT NULL,
+  `quantity` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`Product_productId`, `ProductPOHeader_productPOId`),
   INDEX `fk_Product_has_ProductPOHeader_ProductPOHeader1_idx` (`ProductPOHeader_productPOId` ASC),
   INDEX `fk_Product_has_ProductPOHeader_Product1_idx` (`Product_productId` ASC),
@@ -183,24 +174,25 @@ CREATE TABLE IF NOT EXISTS `merlionLogisticDB`.`ProductPOLineItem` (
     REFERENCES `merlionLogisticDB`.`ProductPOHeader` (`productPOId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
 -- Table `merlionLogisticDB`.`ProductSOHeader`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `merlionLogisticDB`.`ProductSOHeader` (
-  `productSOId` INT NOT NULL,
-  `createdDate` TIMESTAMP NULL,
-  `ProductSOHeadercol` VARCHAR(45) NULL,
-  `price` DOUBLE NULL,
-  `status` VARCHAR(45) NULL,
-  `shipTo` VARCHAR(45) NULL,
-  `billTo` VARCHAR(45) NULL,
-  `contactPersonPhoneNumber` VARCHAR(45) NULL,
-  `contactPersonName` VARCHAR(45) NULL,
-  `text` VARCHAR(45) NULL,
-  `ProductPOHeader_productPOId` INT NOT NULL,
+  `productSOId` INT(11) NOT NULL,
+  `createdDate` TIMESTAMP NULL DEFAULT NULL,
+  `price` DOUBLE NULL DEFAULT NULL,
+  `status` VARCHAR(45) NULL DEFAULT NULL,
+  `shipTo` VARCHAR(45) NULL DEFAULT NULL,
+  `billTo` VARCHAR(45) NULL DEFAULT NULL,
+  `contactPersonPhoneNumber` VARCHAR(45) NULL DEFAULT NULL,
+  `contactPersonName` VARCHAR(45) NULL DEFAULT NULL,
+  `text` VARCHAR(45) NULL DEFAULT NULL,
+  `ProductPOHeader_productPOId` INT(11) NOT NULL,
+  `staffId` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`productSOId`),
   INDEX `fk_ProductSOHeader_ProductPOHeader1_idx` (`ProductPOHeader_productPOId` ASC),
   CONSTRAINT `fk_ProductSOHeader_ProductPOHeader1`
@@ -208,17 +200,18 @@ CREATE TABLE IF NOT EXISTS `merlionLogisticDB`.`ProductSOHeader` (
     REFERENCES `merlionLogisticDB`.`ProductPOHeader` (`productPOId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
 -- Table `merlionLogisticDB`.`ProductSOLineItem`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `merlionLogisticDB`.`ProductSOLineItem` (
-  `Product_productId` INT NOT NULL,
-  `ProductSOHeader_productSOId` INT NOT NULL,
-  `status` VARCHAR(45) NULL,
-  `quantity` INT NULL,
+  `Product_productId` INT(11) NOT NULL,
+  `ProductSOHeader_productSOId` INT(11) NOT NULL,
+  `status` VARCHAR(45) NULL DEFAULT NULL,
+  `quantity` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`Product_productId`, `ProductSOHeader_productSOId`),
   INDEX `fk_Product_has_ProductSOHeader_ProductSOHeader1_idx` (`ProductSOHeader_productSOId` ASC),
   INDEX `fk_Product_has_ProductSOHeader_Product1_idx` (`Product_productId` ASC),
@@ -232,40 +225,63 @@ CREATE TABLE IF NOT EXISTS `merlionLogisticDB`.`ProductSOLineItem` (
     REFERENCES `merlionLogisticDB`.`ProductSOHeader` (`productSOId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `merlionLogisticDB`.`Group`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `merlionLogisticDB`.`Group` (
-  `groupId` INT NOT NULL,
-  `groupType` VARCHAR(45) NULL,
-  `description` VARCHAR(45) NULL,
-  PRIMARY KEY (`groupId`))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
 -- Table `merlionLogisticDB`.`Staff`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `merlionLogisticDB`.`Staff` (
-  `firstName` VARCHAR(45) NULL,
-  `lastName` VARCHAR(45) NULL,
-  `Group_groupId` INT NOT NULL,
-  `SystemUser_systemUserId` INT NOT NULL,
-  INDEX `fk_Staff_SystemUser1_idx` (`SystemUser_systemUserId` ASC),
+  `firstName` VARCHAR(45) NULL DEFAULT NULL,
+  `lastName` VARCHAR(45) NULL DEFAULT NULL,
+  `SystemUser_systemUserId` INT(11) NOT NULL,
+  `UserGroup_groupId` INT(11) NOT NULL,
   PRIMARY KEY (`SystemUser_systemUserId`),
-  CONSTRAINT `fk_Staff_Group1`
-    FOREIGN KEY (`Group_groupId`)
-    REFERENCES `merlionLogisticDB`.`Group` (`groupId`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+  INDEX `fk_Staff_SystemUser1_idx` (`SystemUser_systemUserId` ASC),
+  INDEX `fk_Staff_UserGroup1_idx` (`UserGroup_groupId` ASC),
   CONSTRAINT `fk_Staff_SystemUser1`
     FOREIGN KEY (`SystemUser_systemUserId`)
     REFERENCES `merlionLogisticDB`.`SystemUser` (`systemUserId`)
     ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Staff_UserGroup1`
+    FOREIGN KEY (`UserGroup_groupId`)
+    REFERENCES `merlionLogisticDB`.`UserGroup` (`groupId`)
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `merlionLogisticDB`.`SystemLog`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `merlionLogisticDB`.`SystemLog` (
+  `logId` INT(11) NOT NULL AUTO_INCREMENT,
+  `logTime` TIMESTAMP NULL DEFAULT NULL,
+  `action` VARCHAR(255) NULL DEFAULT NULL,
+  `SystemUser_systemUserId` INT(11) NOT NULL,
+  PRIMARY KEY (`logId`),
+  INDEX `fk_SystemLog_SystemUser_idx` (`SystemUser_systemUserId` ASC),
+  CONSTRAINT `fk_SystemLog_SystemUser`
+    FOREIGN KEY (`SystemUser_systemUserId`)
+    REFERENCES `merlionLogisticDB`.`SystemUser` (`systemUserId`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `merlionLogisticDB`.`MessageDemo`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `merlionLogisticDB`.`MessageDemo` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(45) NULL,
+  `receipent` VARCHAR(45) NULL,
+  `content` VARCHAR(200) NULL,
+  PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
 

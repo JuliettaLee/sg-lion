@@ -4,6 +4,14 @@
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Production</param-value>
     </context-param>
+    <filter>
+        <filter-name>MerlionPortalFilter</filter-name>
+        <filter-class>merlionportal.filters.MerlionPortalFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>MerlionPortalFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
     <servlet>
         <servlet-name>facesServlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
