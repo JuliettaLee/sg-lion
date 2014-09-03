@@ -93,10 +93,10 @@ public class SystemUser implements Serializable {
     @JoinColumn(name = "Company_companyId", referencedColumnName = "companyId")
     @ManyToOne(optional = false)
     private Company companycompanyId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "systemUsersystemUserId")
-    private List<SystemLog> systemLogList;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "systemUser")
     private Client client;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "systemUsersystemUserId")
+    private List<SystemLog> systemLogList;
 
     public SystemUser() {
     }
@@ -216,6 +216,14 @@ public class SystemUser implements Serializable {
         this.companycompanyId = companycompanyId;
     }
 
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
     @XmlTransient
     public List<SystemLog> getSystemLogList() {
         return systemLogList;
@@ -223,14 +231,6 @@ public class SystemUser implements Serializable {
 
     public void setSystemLogList(List<SystemLog> systemLogList) {
         this.systemLogList = systemLogList;
-    }
-
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
     }
 
     @Override

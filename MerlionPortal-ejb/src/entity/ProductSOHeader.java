@@ -38,14 +38,14 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "ProductSOHeader.findAll", query = "SELECT p FROM ProductSOHeader p"),
     @NamedQuery(name = "ProductSOHeader.findByProductSOId", query = "SELECT p FROM ProductSOHeader p WHERE p.productSOId = :productSOId"),
     @NamedQuery(name = "ProductSOHeader.findByCreatedDate", query = "SELECT p FROM ProductSOHeader p WHERE p.createdDate = :createdDate"),
-    @NamedQuery(name = "ProductSOHeader.findByProductSOHeadercol", query = "SELECT p FROM ProductSOHeader p WHERE p.productSOHeadercol = :productSOHeadercol"),
     @NamedQuery(name = "ProductSOHeader.findByPrice", query = "SELECT p FROM ProductSOHeader p WHERE p.price = :price"),
     @NamedQuery(name = "ProductSOHeader.findByStatus", query = "SELECT p FROM ProductSOHeader p WHERE p.status = :status"),
     @NamedQuery(name = "ProductSOHeader.findByShipTo", query = "SELECT p FROM ProductSOHeader p WHERE p.shipTo = :shipTo"),
     @NamedQuery(name = "ProductSOHeader.findByBillTo", query = "SELECT p FROM ProductSOHeader p WHERE p.billTo = :billTo"),
     @NamedQuery(name = "ProductSOHeader.findByContactPersonPhoneNumber", query = "SELECT p FROM ProductSOHeader p WHERE p.contactPersonPhoneNumber = :contactPersonPhoneNumber"),
     @NamedQuery(name = "ProductSOHeader.findByContactPersonName", query = "SELECT p FROM ProductSOHeader p WHERE p.contactPersonName = :contactPersonName"),
-    @NamedQuery(name = "ProductSOHeader.findByText", query = "SELECT p FROM ProductSOHeader p WHERE p.text = :text")})
+    @NamedQuery(name = "ProductSOHeader.findByText", query = "SELECT p FROM ProductSOHeader p WHERE p.text = :text"),
+    @NamedQuery(name = "ProductSOHeader.findByStaffId", query = "SELECT p FROM ProductSOHeader p WHERE p.staffId = :staffId")})
 public class ProductSOHeader implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -56,9 +56,6 @@ public class ProductSOHeader implements Serializable {
     @Column(name = "createdDate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
-    @Size(max = 45)
-    @Column(name = "ProductSOHeadercol")
-    private String productSOHeadercol;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "price")
     private Double price;
@@ -80,6 +77,11 @@ public class ProductSOHeader implements Serializable {
     @Size(max = 45)
     @Column(name = "text")
     private String text;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
+    @Column(name = "staffId")
+    private String staffId;
     @JoinColumn(name = "ProductPOHeader_productPOId", referencedColumnName = "productPOId")
     @ManyToOne(optional = false)
     private ProductPOHeader productPOHeaderproductPOId;
@@ -91,6 +93,11 @@ public class ProductSOHeader implements Serializable {
 
     public ProductSOHeader(Integer productSOId) {
         this.productSOId = productSOId;
+    }
+
+    public ProductSOHeader(Integer productSOId, String staffId) {
+        this.productSOId = productSOId;
+        this.staffId = staffId;
     }
 
     public Integer getProductSOId() {
@@ -107,14 +114,6 @@ public class ProductSOHeader implements Serializable {
 
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
-    }
-
-    public String getProductSOHeadercol() {
-        return productSOHeadercol;
-    }
-
-    public void setProductSOHeadercol(String productSOHeadercol) {
-        this.productSOHeadercol = productSOHeadercol;
     }
 
     public Double getPrice() {
@@ -171,6 +170,14 @@ public class ProductSOHeader implements Serializable {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(String staffId) {
+        this.staffId = staffId;
     }
 
     public ProductPOHeader getProductPOHeaderproductPOId() {
