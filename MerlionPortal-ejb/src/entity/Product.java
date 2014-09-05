@@ -5,7 +5,7 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,6 +19,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -33,9 +34,11 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"),
     @NamedQuery(name = "Product.findByProductId", query = "SELECT p FROM Product p WHERE p.productId = :productId"),
+    @NamedQuery(name = "Product.findByProductName", query = "SELECT p FROM Product p WHERE p.productName = :productName"),
+    @NamedQuery(name = "Product.findByDescription", query = "SELECT p FROM Product p WHERE p.description = :description"),
+    @NamedQuery(name = "Product.findByProductType", query = "SELECT p FROM Product p WHERE p.productType = :productType"),
     @NamedQuery(name = "Product.findByCurrency", query = "SELECT p FROM Product p WHERE p.currency = :currency"),
-    @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price"),
-    @NamedQuery(name = "Product.findByDescription", query = "SELECT p FROM Product p WHERE p.description = :description")})
+    @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price")})
 public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -43,22 +46,34 @@ public class Product implements Serializable {
     @Basic(optional = false)
     @Column(name = "productId")
     private Integer productId;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
+    @Column(name = "productName")
+    private String productName;
+    @Size(max = 45)
+    @Column(name = "description")
+    private String description;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
+    @Column(name = "productType")
+    private String productType;
     @Size(max = 45)
     @Column(name = "currency")
     private String currency;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "price")
     private Double price;
-    @Size(max = 45)
-    @Column(name = "description")
-    private String description;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
-    private Collection<Productsolineitem> productsolineitemCollection;
     @JoinColumn(name = "Company_companyId", referencedColumnName = "companyId")
     @ManyToOne(optional = false)
     private Company companycompanyId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
-    private Collection<Productpolineitem> productpolineitemCollection;
+    private List<ProductSOLineItem> productSOLineItemList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productproductId")
+    private List<Component> componentList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
+    private List<ProductPOLineItem> productPOLineItemList;
 
     public Product() {
     }
@@ -67,12 +82,42 @@ public class Product implements Serializable {
         this.productId = productId;
     }
 
+    public Product(Integer productId, String productName, String productType) {
+        this.productId = productId;
+        this.productName = productName;
+        this.productType = productType;
+    }
+
     public Integer getProductId() {
         return productId;
     }
 
     public void setProductId(Integer productId) {
         this.productId = productId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
     }
 
     public String getCurrency() {
@@ -91,23 +136,6 @@ public class Product implements Serializable {
         this.price = price;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @XmlTransient
-    public Collection<Productsolineitem> getProductsolineitemCollection() {
-        return productsolineitemCollection;
-    }
-
-    public void setProductsolineitemCollection(Collection<Productsolineitem> productsolineitemCollection) {
-        this.productsolineitemCollection = productsolineitemCollection;
-    }
-
     public Company getCompanycompanyId() {
         return companycompanyId;
     }
@@ -117,12 +145,30 @@ public class Product implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Productpolineitem> getProductpolineitemCollection() {
-        return productpolineitemCollection;
+    public List<ProductSOLineItem> getProductSOLineItemList() {
+        return productSOLineItemList;
     }
 
-    public void setProductpolineitemCollection(Collection<Productpolineitem> productpolineitemCollection) {
-        this.productpolineitemCollection = productpolineitemCollection;
+    public void setProductSOLineItemList(List<ProductSOLineItem> productSOLineItemList) {
+        this.productSOLineItemList = productSOLineItemList;
+    }
+
+    @XmlTransient
+    public List<Component> getComponentList() {
+        return componentList;
+    }
+
+    public void setComponentList(List<Component> componentList) {
+        this.componentList = componentList;
+    }
+
+    @XmlTransient
+    public List<ProductPOLineItem> getProductPOLineItemList() {
+        return productPOLineItemList;
+    }
+
+    public void setProductPOLineItemList(List<ProductPOLineItem> productPOLineItemList) {
+        this.productPOLineItemList = productPOLineItemList;
     }
 
     @Override

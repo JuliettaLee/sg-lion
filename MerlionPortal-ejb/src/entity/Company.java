@@ -5,7 +5,7 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -63,9 +63,9 @@ public class Company implements Serializable {
     @Column(name = "description")
     private String description;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "companycompanyId")
-    private Collection<Systemuser> systemuserCollection;
+    private List<Product> productList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "companycompanyId")
-    private Collection<Product> productCollection;
+    private List<SystemUser> systemUserList;
 
     public Company() {
     }
@@ -131,21 +131,21 @@ public class Company implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Systemuser> getSystemuserCollection() {
-        return systemuserCollection;
+    public List<Product> getProductList() {
+        return productList;
     }
 
-    public void setSystemuserCollection(Collection<Systemuser> systemuserCollection) {
-        this.systemuserCollection = systemuserCollection;
+    public void setProductList(List<Product> productList) {
+        this.productList = productList;
     }
 
     @XmlTransient
-    public Collection<Product> getProductCollection() {
-        return productCollection;
+    public List<SystemUser> getSystemUserList() {
+        return systemUserList;
     }
 
-    public void setProductCollection(Collection<Product> productCollection) {
-        this.productCollection = productCollection;
+    public void setSystemUserList(List<SystemUser> systemUserList) {
+        this.systemUserList = systemUserList;
     }
 
     @Override

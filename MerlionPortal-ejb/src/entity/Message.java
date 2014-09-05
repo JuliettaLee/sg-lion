@@ -12,8 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -49,27 +47,20 @@ public class Message implements Serializable {
     @Size(max = 45)
     @Column(name = "messageTitle")
     private String messageTitle;
-    @Size(max = 45)
     @Column(name = "messageType")
-    private String messageType;
+    private Integer messageType;
     @Size(max = 45)
     @Column(name = "messageBody")
     private String messageBody;
-    @Size(max = 45)
     @Column(name = "sender")
-    private String sender;
-    @Size(max = 45)
+    private Integer sender;
     @Column(name = "receiver")
-    private String receiver;
+    private Integer receiver;
     @Column(name = "sentTime")
     @Temporal(TemporalType.TIMESTAMP)
     private Date sentTime;
-    @Size(max = 45)
     @Column(name = "status")
-    private String status;
-    @JoinColumn(name = "SystemUser_systemUserId", referencedColumnName = "systemUserId")
-    @ManyToOne(optional = false)
-    private Systemuser systemUsersystemUserId;
+    private Integer status;
 
     public Message() {
     }
@@ -94,11 +85,11 @@ public class Message implements Serializable {
         this.messageTitle = messageTitle;
     }
 
-    public String getMessageType() {
+    public Integer getMessageType() {
         return messageType;
     }
 
-    public void setMessageType(String messageType) {
+    public void setMessageType(Integer messageType) {
         this.messageType = messageType;
     }
 
@@ -110,19 +101,19 @@ public class Message implements Serializable {
         this.messageBody = messageBody;
     }
 
-    public String getSender() {
+    public Integer getSender() {
         return sender;
     }
 
-    public void setSender(String sender) {
+    public void setSender(Integer sender) {
         this.sender = sender;
     }
 
-    public String getReceiver() {
+    public Integer getReceiver() {
         return receiver;
     }
 
-    public void setReceiver(String receiver) {
+    public void setReceiver(Integer receiver) {
         this.receiver = receiver;
     }
 
@@ -134,20 +125,12 @@ public class Message implements Serializable {
         this.sentTime = sentTime;
     }
 
-    public String getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
-    }
-
-    public Systemuser getSystemUsersystemUserId() {
-        return systemUsersystemUserId;
-    }
-
-    public void setSystemUsersystemUserId(Systemuser systemUsersystemUserId) {
-        this.systemUsersystemUserId = systemUsersystemUserId;
     }
 
     @Override
