@@ -33,11 +33,11 @@ public class MerlionPortalFilter implements Filter {
         boolean redirect = false;
 
 
-        if (requestURI != null && requestURI.length() > 0) {
-        }
+//        if (requestURI != null && requestURI.length() > 0) {
+//        }
 
         if (redirect) {
-            httpServletResponse.sendRedirect(newPage);
+//            httpServletResponse.sendRedirect(newPage);
         } else {
             chain.doFilter(request, response);
         }
